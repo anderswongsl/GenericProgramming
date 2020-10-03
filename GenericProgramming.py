@@ -31,28 +31,21 @@ def copy(generation,fitness,copy_size):
 
 def mutation(generation,mutation_size):
     for n in range(mutation_size):
-        index = np.random.randint(0,generation.shape[0])
+        index = np.random.randint(0,generation.shape[0]-1)
         position = np.random.randint(0,weight_size)
-        dir = np.random.choice([True,False])
-        if dir:
-            generation[index][position:-1] = np.random.uniform(-weight_limit,weight_limit,generation[index][position:-1].shape[0])
-        else:
-            generation[index][:position] = np.random.uniform(-weight_limit,weight_limit,generation[index][:position].shape[0])
+        generation[index][position:-1] = np.random.uniform(-weight_limit,weight_limit,generation[index][position:-1].shape[0])
         generation[index][weight_size] = np.random.uniform(-threshold_limit,threshold_limit)
     return
-def crossover_each(generation,fitness,each_round):
-    index = np.argpartition(-np.random.choice(fitness,size = each_round,replace = False),2)[:2] if generation.shape[0]>2 else [0,1]
-    position = np.random.randint(0,weight_size-1)
-    generation[[0,1]],generation[index] = generation[index],generation[[0,1]]
-    fitness[[0, 1]], fitness[index] = fitness[index], fitness[[0, 1]]
-    new1 = np.concatenate([generation[0][:position],generation[1][position:]])
-    new2 = np.concatenate([generation[1][:position],generation[0][position:]])
-    return new1,new2,generation[2:]
 
 def crossover(generation,fitness,crossover_size,each_round = 10,):
     result = np.empty((crossover_size,weight_size+1))
     for n in range(0,crossover_size,2):
-        result[n],result[n+1],generation= crossover_each(generation,fitness,each_round)
+        index = np.argpartition(-np.random.choice(fitness, size=each_round, replace=False), 2)[:2]
+        position = np.random.randint(0, weight_size - 1)
+        generation[[0, 1]], generation[index] = generation[index], generation[[0, 1]]
+        result[n] = np.concatenate([generation[0][:position], generation[1][position:]])
+        result[n+1] = np.concatenate([generation[1][:position], generation[0][position:]])
+        generation = generation[2:]
     return result
 
 generation = initialize(gen_size)
