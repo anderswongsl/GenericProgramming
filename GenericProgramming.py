@@ -7,7 +7,7 @@ copy_size = 1000
 weight_limit = 2
 threshold_limit = 3
 crossover_size = gen_size - copy_size
-mutation_size = 10
+mutation_size = 100
 def initialize(gen_size):
     generation = [np.random.uniform(-weight_limit,weight_limit,weight_size+1) for n in range(gen_size)]
     for n in range(gen_size):
@@ -50,12 +50,15 @@ def crossover(generation,fitness,crossover_size,each_round = 10,):
 
 generation = initialize(gen_size)
 fitness_max = 0
+test_count = 1
 while(fitness_max !=100):
     new_gen = copy(generation,fitness(generation,train),copy_size)
     mutation(generation,mutation_size)
-    generation = np.concatenate([crossover(generation,fitness(generation,train),crossover_size,10),new_gen])
+    generation = np.concatenate([new_gen,crossover(generation,fitness(generation,train),crossover_size,10)])
     fitness_scores = fitness(generation,train)
     fitness_max = fitness_scores.max()
+    print("Test {}: ".format(test_count))
     print(fitness_max)
     print(generation[np.argmax(fitness_scores)])
+    test_count+=1
 print(generation[np.argmax(fitness_scores)])
