@@ -60,10 +60,6 @@ class ECAgent(Agent):
         west_d = np.dot(training(west, west_r,1),sense)>=0
         south_d = np.dot(training(south, south_r,1),sense)>=0
         north_d = np.dot(training(north, north_r,1),sense)>=0
-        print east_d
-        print south_d
-        print west_d
-        print north_d
 
         if north_d:
             return Directions.NORTH
