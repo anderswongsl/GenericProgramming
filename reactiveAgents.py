@@ -17,7 +17,7 @@ from game import Actions
 import util
 import time
 import search
-from numpy import dot
+import numpy as np
 from learning import training, get_data
 
 class NaiveAgent(Agent):
@@ -51,19 +51,26 @@ class ECAgent(Agent):
     "An agent that follows the boundary using error-correction."
 
     def getAction(self, state):
-        sense = state.getPacmanSensor().append(1)
+        sense = np.append(state.getPacmanSensor(),1)
         east, east_r = get_data("east.csv")
         west, west_r = get_data("west.csv")
         south, south_r = get_data("south.csv")
         north, north_r = get_data("north.csv")
-        east_d = dot(training(east, east_r),sense)>0
-        west_d = dot(training(west, west_r),sense)>0
-        south_d = dot(training(south, south_r),sense)>0
-        north_d = dot(training(north, north_r),sense)>0
-        if east_d:
+        east_d = np.dot(training(east, east_r,1),sense)>=0
+        west_d = np.dot(training(west, west_r,1),sense)>=0
+        south_d = np.dot(training(south, south_r,1),sense)>=0
+        north_d = np.dot(training(north, north_r,1),sense)>=0
+        print east_d
+        print south_d
+        print west_d
+        print north_d
+        if north_d:
+            return Directions.NORTH
+        elif east_d:
             return Directions.EAST
-        if south_d:
+        elif south_d:
             return Directions.SOUTH
-        if west_d:
+        elif west_d:
             return Directions.WEST
-        return Directions.NORTH
+        else:
+            return Directions.NORTH
