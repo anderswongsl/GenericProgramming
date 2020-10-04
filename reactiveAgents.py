@@ -67,5 +67,8 @@ class ECAgent(Agent):
             return Directions.EAST
         elif south_d:
             return Directions.SOUTH
-        else:
+        elif west_d:
             return Directions.WEST
+        else:
+            return Directions.NORTH
+
