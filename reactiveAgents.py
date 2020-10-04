@@ -64,13 +64,12 @@ class ECAgent(Agent):
         print south_d
         print west_d
         print north_d
+
         if north_d:
             return Directions.NORTH
         elif east_d:
             return Directions.EAST
         elif south_d:
             return Directions.SOUTH
-        elif west_d:
-            return Directions.WEST
         else:
-            return Directions.NORTH
+            return Directions.WEST
